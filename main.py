@@ -8,15 +8,17 @@ if __name__ == '__main__':
     window = pygame.display.set_mode((y_window, x_window))
 
     block_size = 20
+
     x_head = 100
     y_head = 100
     x_snake = []
     y_snake = []
-    x_change = 0
-    y_change = 0
 
     y_food = 180
     x_food = 200
+
+    x_change = 0
+    y_change = 0
 
     window.fill((100, 100, 100))
     pygame.draw.rect(window, (0, 255, 0), [y_head, x_head, block_size, block_size])
@@ -24,6 +26,7 @@ if __name__ == '__main__':
         pygame.draw.rect(window, (0, 0, 255), [y_snake[i], x_snake[i], block_size, block_size])
     active = True
 
+    game_speed = 10
     clock = pygame.time.Clock()
 
     while active:
@@ -67,6 +70,7 @@ if __name__ == '__main__':
                     valid = False
                 if valid:
                     set_food = False
+            game_speed += 1
         else:
             y_snake.__delitem__(len(y_snake) - 1)
             x_snake.__delitem__(len(x_snake) - 1)
@@ -88,4 +92,4 @@ if __name__ == '__main__':
         pygame.draw.rect(window, (255, 0, 0), [y_food, x_food, block_size, block_size])
 
         pygame.display.update()
-        clock.tick(15)
+        clock.tick(game_speed)
