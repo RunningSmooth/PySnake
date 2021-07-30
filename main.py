@@ -1,52 +1,64 @@
 import pygame
 import random
 
-if __name__ == '__main__':
-    pygame.init()
-    y_window = 640
-    x_window = 480
-    window = pygame.display.set_mode((y_window, x_window))
+pygame.init()
+y_window = 640
+x_window = 480
+window = pygame.display.set_mode((y_window, x_window))
 
-    block_size = 20
+block_size = 20
 
-    x_head = 100
-    y_head = 100
-    x_snake = []
-    y_snake = []
+x_head = 100
+y_head = 100
+x_snake = []
+y_snake = []
 
-    y_food = 180
-    x_food = 200
+y_food = 180
+x_food = 200
 
-    x_change = 0
-    y_change = 0
+x_change = 0
+y_change = 0
 
-    window.fill((100, 100, 100))
-    pygame.draw.rect(window, (0, 255, 0), [y_head, x_head, block_size, block_size])
-    for i in range(len(x_snake)):
-        pygame.draw.rect(window, (0, 0, 255), [y_snake[i], x_snake[i], block_size, block_size])
-    active = True
+window.fill((100, 100, 100))
+pygame.draw.rect(window, (0, 255, 0), [y_head, x_head, block_size, block_size])
+for i in range(len(x_snake)):
+    pygame.draw.rect(window, (0, 0, 255), [y_snake[i], x_snake[i], block_size, block_size])
+active = True
+game_over = False
 
-    game_speed = 10
-    clock = pygame.time.Clock()
+font_style = pygame.font.SysFont(None, 50)
 
-    while active:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                active = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
-                    x_change = -block_size
-                    y_change = 0
-                elif event.key == pygame.K_s:
-                    x_change = block_size
-                    y_change = 0
-                elif event.key == pygame.K_a:
-                    x_change = 0
-                    y_change = -block_size
-                elif event.key == pygame.K_d:
-                    x_change = 0
-                    y_change = block_size
+game_speed = 10
+clock = pygame.time.Clock()
+mode = 0
 
+while active:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            active = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                x_change = -block_size
+                y_change = 0
+            elif event.key == pygame.K_s:
+                x_change = block_size
+                y_change = 0
+            elif event.key == pygame.K_a:
+                x_change = 0
+                y_change = -block_size
+            elif event.key == pygame.K_d:
+                x_change = 0
+                y_change = block_size
+            elif event.key == pygame.K_SPACE:
+                if mode == 0:
+                    mode += 1
+                elif mode == 2:
+                    mode = 0
+
+    if mode == 0:
+        pass
+
+    elif mode == 1:
         y_snake.insert(0, y_head)
         x_snake.insert(0, x_head)
 
@@ -77,19 +89,26 @@ if __name__ == '__main__':
 
         # checks if snake head lefts the field
         if x_head < 0 or x_head > x_window - block_size:
-            active = False
+            mode = 2
         if y_head < 0 or y_head > y_window - block_size:
-            active = False
+            mode = 2
         # checks if snake head is on snake body
         for i in range(len(x_snake)):
             if x_head == x_snake[i] and y_head == y_snake[i]:
-                active = False
+                mode = 2
 
         window.fill((100, 100, 100))
+
         pygame.draw.rect(window, (0, 255, 0), [y_head, x_head, block_size, block_size])
         for i in range(len(x_snake)):
             pygame.draw.rect(window, (0, 0, 255), [y_snake[i], x_snake[i], block_size, block_size])
         pygame.draw.rect(window, (255, 0, 0), [y_food, x_food, block_size, block_size])
 
-        pygame.display.update()
-        clock.tick(game_speed)
+    elif mode == 2:
+        game_speed = 10
+        window.fill((100, 100, 100))
+        go_message = font_style.render("Game Over", True, (255, 0, 0))
+        window.blit(go_message, [x_window / 2, y_window / 2])
+
+    pygame.display.update()
+    clock.tick(game_speed)
