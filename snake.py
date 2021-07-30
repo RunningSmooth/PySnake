@@ -25,6 +25,8 @@ class Game:
 
         self.font_style = pygame.font.SysFont(None, 50)
         active = True
+        go_init = True
+        self.score = 0
 
         game_speed = 10
         clock = pygame.time.Clock()
@@ -52,6 +54,7 @@ class Game:
                             mode += 1
                             self.x_change = 0
                             self.y_change = 0
+                            go_init = True
                         elif mode == 2:
                             mode = 0
 
@@ -85,6 +88,7 @@ class Game:
                         if valid:
                             set_food = False
                     game_speed += 1
+                    self.score += 1
                 else:
                     self.y_snake.__delitem__(len(self.y_snake) - 1)
                     self.x_snake.__delitem__(len(self.x_snake) - 1)
@@ -100,6 +104,8 @@ class Game:
                         mode = 2
 
                 self.window.fill((100, 100, 100))
+                go_message = self.font_style.render(str(self.score), True, (255, 255, 0))
+                self.window.blit(go_message, [self.x_window / 2, self.y_window / 2])
 
                 pygame.draw.rect(self.window, (0, 255, 0), [self.y_head, self.x_head, self.block_size, self.block_size])
                 for i in range(len(self.x_snake)):
@@ -107,11 +113,13 @@ class Game:
                 pygame.draw.rect(self.window, (255, 0, 0), [self.y_food, self.x_food, self.block_size, self.block_size])
 
             elif mode == 2:
-                self.init_values()
-                game_speed = 10
-                self.window.fill((100, 100, 100))
-                go_message = self.font_style.render("Game Over", True, (255, 0, 0))
-                self.window.blit(go_message, [self.x_window / 2, self.y_window / 2])
+                if go_init:
+                    self.init_values()
+                    game_speed = 10
+                    self.window.fill((100, 100, 100))
+                    go_message = self.font_style.render("Game Over", True, (255, 0, 0))
+                    self.window.blit(go_message, [self.x_window / 2, self.y_window / 2])
+                    go_init = False
 
             pygame.display.update()
             clock.tick(game_speed)
@@ -127,6 +135,7 @@ class Game:
 
         self.x_change = 0
         self.y_change = 0
+        self.score = 0
 
     def run(self):
         pass
