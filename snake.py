@@ -51,6 +51,7 @@ class Game:
                 self.collision_check()
 
                 self.window.fill((0, 0, 0))
+                self.draw_arena()
                 go_message = self.font_style.render(str(self.score), True, (255, 255, 0))
                 self.window.blit(go_message, [self.x_window / 2, self.y_window / 2])
 
@@ -177,6 +178,14 @@ class Game:
         self.window.fill((0, 255, 0), ((self.y_food + 5, self.x_food + 2), (4, 4)))
         self.window.fill((0, 255, 0), ((self.y_food + 4, self.x_food + 2), (1, 2)))
         self.window.fill((0, 255, 0), ((self.y_food + 3, self.x_food + 2), (1, 1)))
+
+    def draw_arena(self):
+        rows = self.x_window / self.block_size
+        columns = self.y_window / self.block_size
+        for i in range(int(rows)):
+            self.window.fill((43, 43, 43), ((0, self.block_size * i - 1), (self.y_window, 2)))
+        for i in range(int(columns)):
+            self.window.fill((43, 43, 43), ((self.block_size * i - 1, 0), (2, self.x_window)))
 
 
 if __name__ == '__main__':
