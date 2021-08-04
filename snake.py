@@ -62,7 +62,6 @@ class Game:
 
             elif self.mode == 2:
                 if self.go_init:
-                    self.init_values()
                     self.window.fill((0, 0, 0))
                     final_score = self.font_style.render("Your Score: " + str(self.score), True, (255, 255, 255))
                     go_message = self.font_style.render("Game Over", True, (255, 0, 0))
@@ -70,6 +69,7 @@ class Game:
                     self.window.blit(final_score, [self.y_window * 0.35, self.x_window * 0.25])
                     self.window.blit(go_message, [self.y_window * 0.37, self.x_window * 0.5])
                     self.window.blit(continue_message, [self.y_window * 0.18, self.x_window * 0.75])
+                    self.init_values()
                     self.go_init = False
 
             pygame.display.update()
@@ -118,8 +118,10 @@ class Game:
                     valid = False
                 if valid:
                     set_food = False
-            self.game_speed += 1
             self.score += 1
+            if self.score % 3 == 0:
+                print("ja")
+                self.game_speed += 1
         else:
             self.y_snake.__delitem__(len(self.y_snake) - 1)
             self.x_snake.__delitem__(len(self.x_snake) - 1)
