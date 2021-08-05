@@ -55,10 +55,11 @@ class Game:
                 go_message = self.font_style.render(str(self.score), True, (255, 255, 0))
                 self.window.blit(go_message, [self.x_window / 2, self.y_window / 2])
 
-                pygame.draw.rect(self.window, (0, 255, 0), [self.y_head, self.x_head, self.block_size, self.block_size])
+                self.draw_head()
                 for i in range(len(self.x_snake)):
-                    pygame.draw.rect(self.window, (0, 0, 255), [self.y_snake[i], self.x_snake[i], self.block_size, self.block_size])
+                    pygame.draw.rect(self.window, (133, 168, 21), [self.y_snake[i], self.x_snake[i], self.block_size, self.block_size])
                 self.draw_food()
+                self.draw_head()
 
             elif self.mode == 2:
                 if self.go_init:
@@ -120,7 +121,6 @@ class Game:
                     set_food = False
             self.score += 1
             if self.score % 3 == 0:
-                print("ja")
                 self.game_speed += 1
         else:
             self.y_snake.__delitem__(len(self.y_snake) - 1)
@@ -181,13 +181,58 @@ class Game:
         self.window.fill((0, 255, 0), ((self.y_food + 4, self.x_food + 2), (1, 2)))
         self.window.fill((0, 255, 0), ((self.y_food + 3, self.x_food + 2), (1, 1)))
 
+    def draw_head(self):
+        # Left
+        if self.y_change < 0:
+            # Head
+            self.window.fill((133, 168, 21), ((self.y_head, self.x_head + 6), (2, 8)))
+            self.window.fill((133, 168, 21), ((self.y_head + 2, self.x_head + 4), (2, 12)))
+            self.window.fill((133, 168, 21), ((self.y_head + 4, self.x_head + 2), (2, 16)))
+            self.window.fill((133, 168, 21), ((self.y_head + 6, self.x_head), (14, 20)))
+            # Eyes
+            self.window.fill((0, 0, 0), ((self.y_head + 5, self.x_head + 5), (3, 3)))
+            self.window.fill((0, 0, 0), ((self.y_head + 5, self.x_head + 12), (3, 3)))
+        # Right
+        elif self.y_change > 0:
+            # Head
+            self.window.fill((133, 168, 21), ((self.y_head + 18, self.x_head + 6), (2, 8)))
+            self.window.fill((133, 168, 21), ((self.y_head + 16, self.x_head + 4), (2, 12)))
+            self.window.fill((133, 168, 21), ((self.y_head + 14, self.x_head + 2), (2, 16)))
+            self.window.fill((133, 168, 21), ((self.y_head, self.x_head), (14, 20)))
+            # Eyes
+            self.window.fill((0, 0, 0), ((self.y_head + 12, self.x_head + 5), (3, 3)))
+            self.window.fill((0, 0, 0), ((self.y_head + 12, self.x_head + 12), (3, 3)))
+        # Down
+        elif self.x_change > 0:
+            # Head
+            self.window.fill((133, 168, 21), ((self.y_head + 6, self.x_head + 18), (8, 2)))
+            self.window.fill((133, 168, 21), ((self.y_head + 4, self.x_head + 16), (12, 2)))
+            self.window.fill((133, 168, 21), ((self.y_head + 2, self.x_head + 14), (16, 2)))
+            self.window.fill((133, 168, 21), ((self.y_head, self.x_head), (20, 14)))
+            # Eyes
+            self.window.fill((0, 0, 0), ((self.y_head + 5, self.x_head + 12), (3, 3)))
+            self.window.fill((0, 0, 0), ((self.y_head + 12, self.x_head + 12), (3, 3)))
+        # Up
+        elif self.x_change < 0:
+            # Head
+            self.window.fill((133, 168, 21), ((self.y_head + 6, self.x_head), (8, 2)))
+            self.window.fill((133, 168, 21), ((self.y_head + 4, self.x_head + 2), (12, 2)))
+            self.window.fill((133, 168, 21), ((self.y_head + 2, self.x_head + 4), (16, 2)))
+            self.window.fill((133, 168, 21), ((self.y_head, self.x_head + 6), (20, 14)))
+            # Eyes
+            self.window.fill((0, 0, 0), ((self.y_head + 5, self.x_head + 5), (3, 3)))
+            self.window.fill((0, 0, 0), ((self.y_head + 12, self.x_head + 5), (3, 3)))
+
+
+
+
     def draw_arena(self):
         rows = self.x_window / self.block_size
         columns = self.y_window / self.block_size
-        for i in range(int(rows)):
-            self.window.fill((43, 43, 43), ((0, self.block_size * i - 1), (self.y_window, 2)))
-        for i in range(int(columns)):
-            self.window.fill((43, 43, 43), ((self.block_size * i - 1, 0), (2, self.x_window)))
+        # for i in range(int(rows)):
+        #     self.window.fill((43, 43, 43), ((0, self.block_size * i - 1), (self.y_window, 2)))
+        # for i in range(int(columns)):
+        #     self.window.fill((43, 43, 43), ((self.block_size * i - 1, 0), (2, self.x_window)))
 
 
 if __name__ == '__main__':
