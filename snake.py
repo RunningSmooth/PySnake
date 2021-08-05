@@ -57,6 +57,9 @@ class Game:
 
                 self.draw_head()
                 for i in range(len(self.x_snake)):
+                    # if i == len(self.x_snake) - 1:
+                    #     self.draw_tail(self.y_snake[i], self.x_snake[i])
+                    # else:
                     pygame.draw.rect(self.window, (133, 168, 21), [self.y_snake[i], self.x_snake[i], self.block_size, self.block_size])
                 self.draw_food()
                 self.draw_head()
@@ -223,16 +226,43 @@ class Game:
             self.window.fill((0, 0, 0), ((self.y_head + 5, self.x_head + 5), (3, 3)))
             self.window.fill((0, 0, 0), ((self.y_head + 12, self.x_head + 5), (3, 3)))
 
-
-
+    def draw_tail(self, pos_y, pos_x):
+        # Left
+        if self.y_change < 0:
+            self.window.fill((133, 168, 21), ((pos_y, pos_x), (8, 20)))
+            self.window.fill((133, 168, 21), ((pos_y + 8, pos_x + 2), (3, 16)))
+            self.window.fill((133, 168, 21), ((pos_y + 11, pos_x + 4), (3, 12)))
+            self.window.fill((133, 168, 21), ((pos_y + 14, pos_x + 6), (3, 8)))
+            self.window.fill((133, 168, 21), ((pos_y + 17, pos_x + 8), (3, 4)))
+        # Right
+        elif self.y_change > 0:
+            self.window.fill((133, 168, 21), ((pos_y + 12, pos_x), (8, 20)))
+            self.window.fill((133, 168, 21), ((pos_y + 9, pos_x + 2), (3, 16)))
+            self.window.fill((133, 168, 21), ((pos_y + 6, pos_x + 4), (3, 12)))
+            self.window.fill((133, 168, 21), ((pos_y + 3, pos_x + 6), (3, 8)))
+            self.window.fill((133, 168, 21), ((pos_y, pos_x + 8), (3, 4)))
+        # Down
+        elif self.x_change > 0:
+            self.window.fill((133, 168, 21), ((pos_y, pos_x + 12), (20, 8)))
+            self.window.fill((133, 168, 21), ((pos_y + 2, pos_x + 9), (16, 3)))
+            self.window.fill((133, 168, 21), ((pos_y + 4, pos_x + 6), (12, 3)))
+            self.window.fill((133, 168, 21), ((pos_y + 6, pos_x + 3), (8, 3)))
+            self.window.fill((133, 168, 21), ((pos_y + 8, pos_x), (4, 3)))
+        # Up
+        elif self.x_change < 0:
+            self.window.fill((133, 168, 21), ((pos_y, pos_x), (20, 8)))
+            self.window.fill((133, 168, 21), ((pos_y + 2, pos_x + 8), (16, 3)))
+            self.window.fill((133, 168, 21), ((pos_y + 4, pos_x + 11), (12, 3)))
+            self.window.fill((133, 168, 21), ((pos_y + 6, pos_x + 14), (8, 3)))
+            self.window.fill((133, 168, 21), ((pos_y + 8, pos_x + 17), (4, 3)))
 
     def draw_arena(self):
         rows = self.x_window / self.block_size
         columns = self.y_window / self.block_size
-        # for i in range(int(rows)):
-        #     self.window.fill((43, 43, 43), ((0, self.block_size * i - 1), (self.y_window, 2)))
-        # for i in range(int(columns)):
-        #     self.window.fill((43, 43, 43), ((self.block_size * i - 1, 0), (2, self.x_window)))
+        for i in range(int(rows)):
+            self.window.fill((43, 43, 43), ((0, self.block_size * i - 1), (self.y_window, 2)))
+        for i in range(int(columns)):
+            self.window.fill((43, 43, 43), ((self.block_size * i - 1, 0), (2, self.x_window)))
 
 
 if __name__ == '__main__':
