@@ -7,6 +7,7 @@ class Game:
         self.y_window = 640
         self.x_window = 480
         self.window = pygame.display.set_mode((self.y_window, self.x_window))
+        pygame.display.set_caption('Pygame by RunningSmooth')
 
         self.block_size = 20
 
