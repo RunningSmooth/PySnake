@@ -80,6 +80,7 @@ class Game:
             clock.tick(self.game_speed)
 
     def init_values(self):
+        ''' Function sets the initial values for the game. '''
         self.x_head = 100
         self.y_head = 100
         self.x_snake = []
@@ -92,6 +93,7 @@ class Game:
         self.game_speed = 10
 
     def collision_check(self):
+        ''' Function checks if the snakes head collides with itself or the arena borders. '''
         # checks if snake head lefts the field
         if self.x_head < 0 or self.x_head > self.x_window - self.block_size:
             self.mode = 2
@@ -103,16 +105,18 @@ class Game:
                 self.mode = 2
 
     def food_process(self):
+        ''' Function checks if the snake ate the food and if needed places a new food. '''
         # checks if snake head is on food -> if yes then place new food and snake grows
         if self.x_head == self.x_food and self.y_head == self.y_food:
             set_food = True
             while set_food:
+                # randomise food position
                 self.y_food = random.randint(0,
                                              int((self.y_window - self.block_size) / self.block_size)) * self.block_size
                 self.x_food = random.randint(0,
                                              int((self.x_window - self.block_size) / self.block_size)) * self.block_size
-                # checks if food is placed on the snake -> if not then placement is valid, else roll position again
                 valid = True
+                # checks if the food is not placed on the snake
                 if self.y_food != self.y_head and self.x_food != self.x_head:
                     for i in range(len(self.y_snake)):
                         if self.y_food == self.y_snake[i] and self.x_food == self.x_snake[i]:
@@ -120,46 +124,60 @@ class Game:
                             break
                 else:
                     valid = False
+                # checks if position was valid -> if true then food can stay, else position the food again.
                 if valid:
                     set_food = False
+            # every 3 points the game gets faster
             self.score += 1
             if self.score % 3 == 0:
                 self.game_speed += 1
+        # if the head of the snake is not on food, the last element in the snake array is deleted
         else:
             self.y_snake.__delitem__(len(self.y_snake) - 1)
             self.x_snake.__delitem__(len(self.x_snake) - 1)
 
     def event_handler(self):
+        ''' Function checks for events, like keyboard input or button clicks. '''
         for event in pygame.event.get():
+            # Button event
             if event.type == pygame.QUIT:
                 self.active = False
+            # Keyboard events
             if event.type == pygame.KEYDOWN:
+                # Snake go up.
                 if event.key == pygame.K_w:
                     if self.x_change != self.block_size or len(self.x_snake) == 0:
                         self.x_change = -self.block_size
                         self.y_change = 0
+                # Snake go down.
                 elif event.key == pygame.K_s:
                     if self.x_change != -self.block_size or len(self.x_snake) == 0:
                         self.x_change = self.block_size
                         self.y_change = 0
+                # Snake go left.
                 elif event.key == pygame.K_a:
                     if self.y_change != self.block_size or len(self.x_snake) == 0:
                         self.x_change = 0
                         self.y_change = -self.block_size
+                # Snake go right.
                 elif event.key == pygame.K_d:
                     if self.y_change != -self.block_size or len(self.x_snake) == 0:
                         self.x_change = 0
                         self.y_change = self.block_size
+                # Change mode
                 elif event.key == pygame.K_SPACE:
+                    # start game
                     if self.mode == 0:
                         self.mode += 1
                         self.x_change = 0
                         self.y_change = 0
                         self.go_init = True
+                    # start main menu
                     elif self.mode == 2:
                         self.mode = 0
 
     def draw_food(self):
+        ''' Function draws the food '''
         # Cherry
         self.window.fill((255, 0, 0), ((self.y_food + 2, self.x_food + 11), (7, 7)))
         self.window.fill((255, 0, 0), ((self.y_food + 11, self.x_food + 11), (7, 7)))
@@ -185,6 +203,7 @@ class Game:
         self.window.fill((0, 255, 0), ((self.y_food + 3, self.x_food + 2), (1, 1)))
 
     def draw_head(self):
+        ''' Function draws the snakes head. '''
         # Left
         if self.y_change < 0:
             # Head
@@ -227,6 +246,11 @@ class Game:
             self.window.fill((0, 0, 0), ((self.y_head + 12, self.x_head + 5), (3, 3)))
 
     def draw_tail(self, pos_y, pos_x):
+        ''' Function draws the snakes tail.
+        Parameters:
+            pos_x (int): horizontal position of the tail
+            pos_y (int): vertical position of the tail
+         '''
         # Left
         if self.y_change < 0:
             self.window.fill((133, 168, 21), ((pos_y, pos_x), (8, 20)))
@@ -257,10 +281,13 @@ class Game:
             self.window.fill((133, 168, 21), ((pos_y + 8, pos_x + 17), (4, 3)))
 
     def draw_arena(self):
+        ''' Function draws the arena. '''
         rows = self.x_window / self.block_size
         columns = self.y_window / self.block_size
+        # Drawing horizontal lines
         for i in range(int(rows)):
             self.window.fill((43, 43, 43), ((0, self.block_size * i - 1), (self.y_window, 2)))
+        # Drawing vertical lines
         for i in range(int(columns)):
             self.window.fill((43, 43, 43), ((self.block_size * i - 1, 0), (2, self.x_window)))
 
