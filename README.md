@@ -34,6 +34,6 @@ To run the project locally, enter the following in the command line / bash:
 $ git clone https://github.com/RunningSmooth/PySnake
 $ cd PySnake
 $ pip install -r requirements.txt
-$ python app.py
+$ python snake.py
 ```
 ---
